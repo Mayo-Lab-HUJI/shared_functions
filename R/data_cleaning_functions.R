@@ -123,7 +123,10 @@ remove_clicks_counters <- function(mymyData) {
 #'   \item Disturbance: Participants with `Disturbance` not equal to 1 are removed.
 #'   \item Quality Check: Participants with `Quality_check` not equal to 1 are removed.
 #'   \item Age: Participants outside the specified `ageRange` are removed.
+#'
 #' }
+#'
+#' @export
 #'
 exclude_participants_by_criteria <- function(myData, id = "Prolific_ID", ready = "Ready", duration = "Duration..in.seconds.",
                                              consent = "Consent", progress = "Progress",
@@ -275,4 +278,3 @@ exclude_participants_by_criteria <- function(myData, id = "Prolific_ID", ready =
 
   return(list(filtered_data = myData, summary_table = summary_table))
 }
-
