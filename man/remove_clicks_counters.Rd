@@ -4,7 +4,7 @@
 \alias{remove_clicks_counters}
 \title{Remove click counter and timer columns}
 \usage{
-remove_clicks_counters(mymyData)
+remove_clicks_counters(myData)
 }
 \arguments{
 \item{myData}{A data frame.}

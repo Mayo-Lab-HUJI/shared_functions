@@ -10,8 +10,8 @@ remove_qualtrics_default_fields <- function(myData) {
   # omit rows 1-2
   myData <- myData[3:nrow(myData), ]
 
-  # omit columns 1-4, 8-18
-  myData <- myData[, c(5:7, 18:ncol(myData))]
+  # omit columns 1, 3-5, 7-17
+  myData <- myData[, -c(1, 3:5,7:17)]
 
   # Return the cleaned data
   cat ("Raw data: ", nrow(myData))
@@ -50,7 +50,7 @@ remove_QP_default_fields <- function(myData) {
 #' @param myData A data frame.
 #' @return A data frame with no click counters and timers.
 #' @export
-remove_clicks_counters <- function(mymyData) {
+remove_clicks_counters <- function(myData) {
   # Hardcoded suffixes to remove
   suffixes <- c("First.Click", "Last.Click", "Page.Submit", "Click.Count")
   pattern <- paste0("(", paste(suffixes, collapse = "|"), ")$")
@@ -79,6 +79,43 @@ remove_clicks_counters <- function(mymyData) {
   }
 
   return(myData)
+}
+
+
+
+
+#' Find Duplicate IDs and Their Progress Values
+#'
+#' This function identifies duplicate IDs in a dataset and retrieves the corresponding
+#' progress values for each occurrence.
+#'
+#' @param myData A data frame containing the ID and progress columns.
+#' @param id A character string specifying the column name of the IDs. Default is `"Prolific_ID"`.
+#' @param progress A character string specifying the column name of the progress values. Default is `"Progress"`.
+#'
+#' @return A data frame containing duplicated IDs and their corresponding progress values.
+#' @export
+find_duplicate_ids <- function(myData, id = "Prolific_ID", progress = "Progress") {
+  # Ensure the ID and Progress columns exist in the data frame
+  if (!id %in% names(myData)) {
+    stop("The specified ID column does not exist in the data frame.")
+  }
+
+  if (!progress %in% names(myData)) {
+    stop("The specified Progress column does not exist in the data frame.")
+  }
+
+  # Count occurrences of each ID
+  id_counts <- table(myData[[id]])
+
+  # Extract IDs that appear more than once
+  duplicate_ids <- names(id_counts[id_counts > 1])
+
+  # Filter data for only duplicated IDs and select relevant columns
+  duplicate_data <- myData[myData[[id]] %in% duplicate_ids, c(id, progress)]
+
+  # Return the filtered data
+  return(duplicate_data)
 }
 
 
@@ -278,3 +315,5 @@ exclude_participants_by_criteria <- function(myData, id = "Prolific_ID", ready =
 
   return(list(filtered_data = myData, summary_table = summary_table))
 }
+
+
