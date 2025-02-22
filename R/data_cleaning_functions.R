@@ -1,20 +1,29 @@
-#' Remove irrelevant rows and columns from a Dataset
+#' Remove irrelevant rows and columns from a dataset
 #'
-#' This function removes rows and columns introduced by Qualtrics.
+#' This function removes the first two rows and specific columns that are irrelevant for analysis,
+#' typically introduced by Qualtrics.
 #'
 #' @param myData A data frame.
-#' @return A data frame with rows 1-2 and columns 1-17 removed.
+#' @return A cleaned data frame with the first two rows removed and specific columns dropped.
 #' @export
 remove_qualtrics_default_fields <- function(myData) {
 
-  # omit rows 1-2
-  myData <- myData[3:nrow(myData), ]
+  # Define the list of column names to remove
+  col_names_to_exclude <- c("StartDate", "EndDate", "Status", "IPAddress", "Finished", "RecordedDate",
+                            "ResponseId", "RecipientLastName", "RecipientFirstName", "RecipientEmail",
+                            "ExternalReference", "LocationLatitude", "LocationLongitude", "DistributionChannel",
+                            "UserLanguage")
 
-  # omit columns 1, 3-5, 7-17
-  myData <- myData[, -c(1, 3:5,7:17)]
+  # Remove the first two rows
+  myData <- myData[-c(1,2), ]
 
-  # Return the cleaned data
-  cat ("Raw data: ", nrow(myData))
+  # Remove columns by name (only if they exist in the dataset)
+  existing_cols <- intersect(col_names_to_exclude, colnames(myData))
+  myData <- myData[, !colnames(myData) %in% existing_cols]
+
+  # Print the number of remaining rows
+  cat("Rows after cleaning:", nrow(myData), "\n")
+
   return(myData)
 }
 
