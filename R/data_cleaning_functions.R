@@ -170,6 +170,14 @@ exclude_participants_by_criteria <- function(myData, id = "Prolific_ID", ready =
                                              consecutively = "Consecutively", disturbance = "Disturbance",
                                              quality_check = "Quality_check", age = "Age", ageRange = c(18, 80)) {
 
+  # Convert all the variables to numeric
+  numeric_vars <- c(ready, duration, consent, progress, consecutively, disturbance, quality_check, age)
+  for (var in numeric_vars) {
+    if (var %in% colnames(myData)) {
+      myData[[var]] <- as.numeric(myData[[var]])
+    }
+  }
+
   # Helper function to check if a column exists
   validate_column <- function(column_name) {
     if (!column_name %in% colnames(myData)) {
@@ -315,5 +323,4 @@ exclude_participants_by_criteria <- function(myData, id = "Prolific_ID", ready =
 
   return(list(filtered_data = myData, summary_table = summary_table))
 }
-
 
