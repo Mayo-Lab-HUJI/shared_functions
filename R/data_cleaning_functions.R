@@ -22,7 +22,7 @@ remove_qualtrics_default_fields <- function(myData) {
   myData <- myData[, !colnames(myData) %in% existing_cols]
 
   # Print the number of remaining rows
-  cat("Rows after cleaning:", nrow(myData), "\n")
+  cat("Raw data:", nrow(myData), "\n")
 
   return(myData)
 }
