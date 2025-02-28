@@ -10,7 +10,7 @@ remove_QP_default_fields(myData)
 \item{myData}{A data frame.}
 }
 \value{
-A data frame with row 1 and columns 1,3, 4-5, 7-20 removed.
+A cleaned data frame with row 1 removed and specific columns dropped.
 }
 \description{
 This function removes rows and columns introduced by Question Pro.

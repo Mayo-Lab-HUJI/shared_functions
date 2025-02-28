@@ -2,7 +2,7 @@
 % Please edit documentation in R/data_cleaning_functions.R
 \name{remove_qualtrics_default_fields}
 \alias{remove_qualtrics_default_fields}
-\title{Remove irrelevant rows and columns from a Dataset}
+\title{Remove irrelevant rows and columns from a dataset}
 \usage{
 remove_qualtrics_default_fields(myData)
 }
@@ -10,8 +10,9 @@ remove_qualtrics_default_fields(myData)
 \item{myData}{A data frame.}
 }
 \value{
-A data frame with rows 1-2 and columns 1-17 removed.
+A cleaned data frame with the first two rows removed and specific columns dropped.
 }
 \description{
-This function removes rows and columns introduced by Qualtrics.
+This function removes the first two rows and specific columns that are irrelevant for analysis,
+typically introduced by Qualtrics.
 }

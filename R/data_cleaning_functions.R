@@ -34,18 +34,26 @@ remove_qualtrics_default_fields <- function(myData) {
 #' This function removes rows and columns introduced by Question Pro.
 #'
 #' @param myData A data frame.
-#' @return A data frame with row 1 and columns 1,3, 4-5, 7-20 removed.
+#' @return A cleaned data frame with row 1 removed and specific columns dropped.
 #' @export
 remove_QP_default_fields <- function(myData) {
 
-  # omit row 1
-  myData <- myData[2:nrow(myData), ]
+  # Define the list of column names to remove
+  col_names_to_exclude <- c("Response.ID", "IP.Address", "Timestamp..mm.dd.yyyy.","Duplicate", "Seq..Number",
+                            "External.Reference","Custom.Variable.1","Custom.Variable.2","Custom.Variable.3",
+                            "Custom.Variable.4","Custom.Variable.5","Respondent.Email","Email.List","Country.Code",
+                            "Region")
 
-  # omit columns 1,3,4-5, 7-20
-  myData <- myData[ ,-c(1,3,4:5,7:20)]
+  # Remove the first row
+  myData <- myData[-1, ]
 
-  # Return the cleaned data
-  cat ("Raw data: ", nrow(myData))
+  # Remove columns by name (only if they exist in the dataset)
+  existing_cols <- intersect(col_names_to_exclude, colnames(myData))
+  myData <- myData[, !colnames(myData) %in% existing_cols]
+
+  # Print the number of remaining rows
+  cat("Raw data:", nrow(myData), "\n")
+
   return(myData)
 }
 
@@ -164,7 +172,7 @@ find_duplicate_ids <- function(myData, id = "Prolific_ID", progress = "Progress"
 #'   \item Readiness: Participants with `Ready` not equal to 1 are removed.
 #'   \item Duration: Participants with duration 0, exceeding a timeout value (2640 seconds), or exceeding the mean duration plus three standard deviations are removed.
 #'   \item Consent: Participants with `Consent` not equal to 1 are removed.
-#'   \item Progress: Participants with `Progress` not equal to 100 are removed.
+#'   \item Progress: Participants with `Progress` less than 99% are removed.
 #'   \item Consecutiveness: Participants with `Consecutively` not equal to 2 are removed.
 #'   \item Disturbance: Participants with `Disturbance` not equal to 1 are removed.
 #'   \item Quality Check: Participants with `Quality_check` not equal to 1 are removed.
@@ -227,7 +235,7 @@ exclude_participants_by_criteria <- function(myData, id = "Prolific_ID", ready =
   }
 
   if (validate_column(progress)) {
-    exclusions$incomplete <- myData[[id]][myData[[progress]] != 100]
+    exclusions$incomplete <- myData[[id]][!myData[[progress]] %in% c(99,100)]
   }
 
   if (validate_column(consecutively)) {
@@ -298,8 +306,8 @@ exclude_participants_by_criteria <- function(myData, id = "Prolific_ID", ready =
   }
 
   if (validate_column(progress)) {
-    incompleteRows <- sum(myData[[progress]] != 100)
-    myData <- myData[myData[[progress]] == 100, ]
+    incompleteRows <- sum(!myData[[progress]] %in% c(99,100))
+    myData <- myData[myData[[progress]] %in% c(99,100), ]
     message("Removed incomplete participants: ", incompleteRows)
   }
 

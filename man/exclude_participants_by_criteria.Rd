@@ -64,7 +64,7 @@ The function applies a series of exclusion criteria to the dataset:
 \item Readiness: Participants with \code{Ready} not equal to 1 are removed.
 \item Duration: Participants with duration 0, exceeding a timeout value (2640 seconds), or exceeding the mean duration plus three standard deviations are removed.
 \item Consent: Participants with \code{Consent} not equal to 1 are removed.
-\item Progress: Participants with \code{Progress} not equal to 100 are removed.
+\item Progress: Participants with \code{Progress} less than 99\% are removed.
 \item Consecutiveness: Participants with \code{Consecutively} not equal to 2 are removed.
 \item Disturbance: Participants with \code{Disturbance} not equal to 1 are removed.
 \item Quality Check: Participants with \code{Quality_check} not equal to 1 are removed.
